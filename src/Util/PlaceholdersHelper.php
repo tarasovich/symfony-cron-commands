@@ -19,7 +19,7 @@ class PlaceholdersHelper
         ];
     }
 
-    public static function processTemplate(string $template, CronCommandInterface $command, array $placeholders = []): string
+    public static function processTemplate(string $template, ?CronCommandInterface $command, array $placeholders = []): string
     {
         $placeholders = array_merge(self::getCommandPlaceholders($command), $placeholders);
 

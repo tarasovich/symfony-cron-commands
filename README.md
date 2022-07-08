@@ -40,3 +40,27 @@ return [
     Tarasovich\CronCommands\CronCommandsBundle::class => ['all' => true],
 ];
 ```
+
+### Step 3: Configure the Bundle
+
+Then configure the bundle by creating `config/packages/cron_commands.yaml`: 
+
+```yaml
+# config/packages/cron_commands.yaml
+
+cron_commands:
+  locks:
+    enabled: true # Enable lock listener
+    template: 'var/run/{command_dashes}.{env}.lock' # Lock file name template relative to project dir or absolute
+
+  linux_config_generation:
+    enabled: true # Enable linux config generation command
+    templates:
+      task: '{interval} {user} php {bin} --env={env} {command} {logging}' # Task template
+      log_filename: '{command_dashes}.{env}.log' # Log file name template
+    default_options: # Default command options
+      bin: '%kernel.project_dir%/bin/console'
+      logs: '%kernel.logs_dir%'
+      output: '%kernel.project_dir%/var/tmp/self-serve-cron.conf'
+      user: '{current_user}'
+```

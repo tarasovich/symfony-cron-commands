@@ -1,0 +1,18 @@
+services:
+  tarasovich.cron_commands.command.generate_config:
+    class: Tarasovich\CronCommands\Command\GenerateLinuxConfigCommand
+    arguments:
+      $cronCommands: !tagged_iterator tarasovich.cron.command
+      $templates: []
+      $defaultOptions: []
+    tags:
+      - { name: 'console.command', command: 'tarasovich:cron-commands:generate-linux-config' }
+
+  tarasovich.cron_commands.event_listener.command_lock:
+    class: Tarasovich\CronCommands\EventListener\Console\CronCommandLockListener
+    arguments:
+      $projectDir: '%kernel.project_dir%'
+      $template:
+    tags:
+      - { name: 'kernel.event_listener', event: !php/const Symfony\Component\Console\ConsoleEvents::COMMAND, method: 'onCommand', azy: true }
+      - { name: 'kernel.event_listener', event: !php/const Symfony\Component\Console\ConsoleEvents::TERMINATE, method: 'onTerminate', azy: true }
